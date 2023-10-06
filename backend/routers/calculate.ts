@@ -64,3 +64,12 @@ calculateRouter.post("/division", (req: Request, res: Response) => {
         return res.status(500).json({ error: "計算に失敗しました" });
     };
 });
+
+calculateRouter.get("/test", (req: Request, res: Response) => {
+    try {
+        return res.status(200).json({ message: "OK", version: 1 });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: "サーバーエラーです" })
+    }
+});
