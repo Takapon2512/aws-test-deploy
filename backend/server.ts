@@ -1,12 +1,13 @@
-import express, { Application } from "express";
+import express, { Express } from "express";
 import cors from "cors";
+import "dotenv/config";
 
 //routers
 import { calculateRouter } from "./routers/calculate";
 
 
-const app: Application = express();
-const PORT = 8080;
+const app: Express = express();
+const PORT = process.env.PORT || "80";
 
 app.use(cors());
 app.use(express.json());
