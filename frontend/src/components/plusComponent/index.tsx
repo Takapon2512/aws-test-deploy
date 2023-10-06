@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { apiClient } from '../../../lib/apiClients';
 
-const PlusComponent = () => {
+const PlusComponent = ({ status }: { status: boolean }) => {
   const [value1, setValue1] = useState<string>("");
   const [value2, setValue2] = useState<string>("");
   const [result, setResult] = useState<string>("");
@@ -10,13 +10,21 @@ const PlusComponent = () => {
   const changeValue2 = (e: React.ChangeEvent<HTMLInputElement>) => setValue2(e.target.value);
 
   const valuesSend = async () => {
-    const response = await apiClient.post("/plus", { value1: value1, value2: value2 });
+    if (status) {
+      const response = await apiClient.post("/plus", { value1: value1, value2: value2 });
+  
+      try {
+        setResult(response.data);
+      } catch (err) {
+        console.error(err);
+      };
+    } else {
+      const numValue1 = Number(value1);
+      const numValue2 = Number(value2);
 
-    try {
-      setResult(response.data);
-    } catch (err) {
-      console.error(err);
-    };
+      const result: number = numValue1 + numValue2;
+      setResult(String(result));
+    }
   }
 
   useEffect(() => {

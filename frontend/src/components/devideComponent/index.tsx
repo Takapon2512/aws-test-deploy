@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 //lib
 import { apiClient } from '../../../lib/apiClients';
 
-const DevideComponent = () => {
+const DevideComponent = ({ status }: { status: boolean }) => {
   const [value1, setValue1] = useState<string>("");
   const [value2, setValue2] = useState<string>("");
   const [result, setResult] = useState<string>("");
@@ -12,14 +12,22 @@ const DevideComponent = () => {
   const changeValue2 = (e: React.ChangeEvent<HTMLInputElement>) => setValue2(e.target.value);
 
   const valuesSend = async () => {
-    const response = await apiClient.post("/division", { value1: value1, value2: value2 });
+    if (status) {
+      const response = await apiClient.post("/division", { value1: value1, value2: value2 });
+  
+      try {
+        setResult(response.data);
+      } catch (err) {
+        console.error(err);
+      };
+    } else {
+      const numValue1 = Number(value1);
+      const numValue2 = Number(value2);
 
-    try {
-      setResult(response.data);
-    } catch (err) {
-      console.error(err);
+      const result: number = Math.floor((numValue1 / numValue2) * 100) / 100;
+      setResult(String(result));
     };
-  }
+  };
 
   useEffect(() => {
     valuesSend();
