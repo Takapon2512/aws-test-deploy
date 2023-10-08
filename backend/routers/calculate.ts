@@ -67,7 +67,7 @@ calculateRouter.post("/division", (req: Request, res: Response) => {
 
 calculateRouter.get("/test", (req: Request, res: Response) => {
     try {
-        return res.status(200).json({ message: "OK", version: 1 });
+        return res.status(200).json({ message: "OK", version: 2 });
     } catch (err) {
         console.error(err);
         return res.status(500).json({ error: "サーバーエラーです" })
