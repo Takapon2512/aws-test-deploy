@@ -49,10 +49,12 @@ jobs:
         env:
           SERVER_USER: ${{ secrets.BACKEND_SERVER_USER }}
           SERVER_IP: ${{ secrets.BACKEND_SERVER_IP }}
+      
       - run: rsync -v ${SERVER_USER}@${SERVER_IP}:~/index.js ${SERVER_USER}@10.0.1.40:~/index.js
         env:
           SERVER_USER: ${{ secrets.BACKEND_SERVER_USER }}
           SERVER_IP: ${{ secrets.BACKEND_SERVER_IP }}
+
       - run: ssh -i ${SERVER_SSH_KEY} ${SERVER_USER}@10.0.1.40 -J ${SERVER_USER}@${SERVER_IP} "sudo systemctl restart backend"
         env:
           SERVER_USER: ${{ secrets.BACKEND_SERVER_USER }}
