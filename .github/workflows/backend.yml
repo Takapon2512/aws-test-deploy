@@ -28,5 +28,29 @@ jobs:
         with:
           name: dist
           path: backend/dist/index.js
-          retention-days: 5 
+          retention-days: 5
+  
+  deploy:
+    needs: build
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.BACKEND_SERVER_SSH_KEY }}
+          known_hosts: ${{ secrets.BACKEND_SERVER_KNOWN_HOSTS }}
+
+      - run: rsync -v dist/index.js ${SERVER_USER}@${SERVER_IP}:~/aws-test-deploy/backend/dist/index.js
+        env:
+          SERVER_USER: ${{ secrets.BACKEND_SERVER_USER }}
+          SERVER_IP: ${{ secrets.BACKEND_SERVER_IP }}
+      - run: ssh ${SERVER_USER}@${SERVER_IP}
+        env:
+          SERVER_USER: ${{ secrets.BACKEND_SERVER_USER }}
+          SERVER_IP: ${{ secrets.BACKEND_SERVER_IP }}
+      - run: rsync -v -e 'ssh -i myprivatekey.pem aws-test-deploy/backend/dist/index.js ubuntu@10.0.1.40:~/index.js'
+      - run: ssh -i myprivatekey.pem ubuntu@10.0.1.40 sudo systemctl restart backend
+      - run: ssh -i myprivatekey.pem ubuntu@10.0.1.40 systemctl status backend
+      - run: exit
+
 
