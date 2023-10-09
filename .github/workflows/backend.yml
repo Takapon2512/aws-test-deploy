@@ -50,7 +50,7 @@ jobs:
           SERVER_USER: ${{ secrets.BACKEND_SERVER_USER }}
           SERVER_IP: ${{ secrets.BACKEND_SERVER_IP }}
       
-      - run: rsync -v -e "ssh -i ${SERVER_SSH_KEY}" ${SERVER_USER}@${SERVER_IP}:~/index.js "ssh -i ${SERVER_SSH_KEY}" ${SERVER_USER}@10.0.1.40:~/index.js
+      - run: rsync -v -e "ssh -i ${SERVER_SSH_KEY}" ${SERVER_USER}@${SERVER_IP}:~/index.js -v -e "ssh -i ${SERVER_SSH_KEY}" ${SERVER_USER}@10.0.1.40:~/index.js
         env:
           SERVER_USER: ${{ secrets.BACKEND_SERVER_USER }}
           SERVER_IP: ${{ secrets.BACKEND_SERVER_IP }}
