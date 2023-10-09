@@ -45,25 +45,6 @@ jobs:
           key: ${{ secrets.BACKEND_SERVER_SSH_KEY }}
           known_hosts: ${{ secrets.BACKEND_SERVER_KNOWN_HOSTS }}
 
-      - run: rsync -v dist/index.js ${SERVER_USER}@${SERVER_IP}:~/index.js
-        env:
-          SERVER_USER: ${{ secrets.BACKEND_SERVER_USER }}
-          SERVER_IP: ${{ secrets.BACKEND_SERVER_IP }}
-
-      - run: scp -i ${SERVER_SSH_KEY} ${SERVER_USER}@${SERVER_IP}:~/index.js ${SERVER_USER}@10.0.1.40:~/index.js
-        env:
-          SERVER_USER: ${{ secrets.BACKEND_SERVER_USER }}
-          SERVER_IP: ${{ secrets.BACKEND_SERVER_IP }}
-          SERVER_SSH_KEY: ${{ secrets.BACKEND_SERVER_SSH_KEY }}
-
-      - run: ssh -i ${SERVER_SSH_KEY} ${SERVER_USER}@10.0.1.40 -J ${SERVER_USER}@${SERVER_IP} "sudo systemctl restart backend"
-        env:
-          SERVER_USER: ${{ secrets.BACKEND_SERVER_USER }}
-          SERVER_IP: ${{ secrets.BACKEND_SERVER_IP }}
-          SERVER_SSH_KEY: ${{ secrets.BACKEND_SERVER_SSH_KEY }}
-      - run: ssh -i ${SERVER_SSH_KEY} ${SERVER_USER}@10.0.1.40 -J ${SERVER_USER}@${SERVER_IP} "systemctl status backend"
-        env:
-          SERVER_USER: ${{ secrets.BACKEND_SERVER_USER }}
-          SERVER_SSH_KEY: ${{ secrets.BACKEND_SERVER_SSH_KEY }}
+      - run: aws s3 sync dist s3://aws-test-app-backend --exact-timestamps --region ap-northeast-1
 
 
