@@ -53,9 +53,15 @@ jobs:
         env:
           SERVER_USER: ${{ secrets.BACKEND_SERVER_USER }}
           SERVER_IP: ${{ secrets.BACKEND_SERVER_IP }}
-      - run: rsync -v -e 'ssh -i myprivatekey.pem ~/index.js ubuntu@10.0.1.40:~/index.js'
-      - run: ssh -i myprivatekey.pem ubuntu@10.0.1.40 sudo systemctl restart backend
-      - run: ssh -i myprivatekey.pem ubuntu@10.0.1.40 systemctl status backend
+      - run: rsync -v -e 'ssh -i myprivatekey.pem index.js ${SERVER_USER}@10.0.1.40:~/index.js'
+        env:
+          SERVER_USER: ${{ secrets.BACKEND_SERVER_USER }}
+      - run: ssh -i myprivatekey.pem ${SERVER_USER}@10.0.1.40 sudo systemctl restart backend
+        env:
+          SERVER_USER: ${{ secrets.BACKEND_SERVER_USER }}
+      - run: ssh -i myprivatekey.pem ${SERVER_USER}@10.0.1.40 systemctl status backend
+        env:
+          SERVER_USER: ${{ secrets.BACKEND_SERVER_USER }}
       - run: exit
 
 
