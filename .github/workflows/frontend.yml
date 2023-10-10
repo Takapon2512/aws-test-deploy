@@ -26,15 +26,17 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: .next
+          name: next
           path: frontend/.next
           retention-days: 5
 
   deploy:
+    needs: build
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: aws s3 sync .next s3://aws-test-app-backend --exact-timestamps --region ap-northeast-1
+      - run: aws s3 sync next s3://aws-test-app-backend --exact-timestamps --region ap-northeast-1
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.BACKEND_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.BACKEND_AWS_SECRET_ACCESS_KEY }}
