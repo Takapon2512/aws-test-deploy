@@ -41,3 +41,16 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.BACKEND_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.BACKEND_AWS_SECRET_ACCESS_KEY }}
 
+      - uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: backend/dist
+      - run: scp -o "ProxyCommand ssh -i ${SERVER_SSH_KEY} ${SERVER_USER}@${SERVER_IP} -W %h:%p" dist/index.js ${SERVER_USER}@10.0.1.40:~/index.js
+        env:
+          SERVER_IP: ${{ secrets.BACKEND_SERVER_IP }}
+          SERVER_SSH_KEY: ${{ secrets.BACKEND_SERVER_SSH_KEY }}
+          SERVER_USER: ${{ secrets.BACKEND_SERVER_USER }}
+
+          
+            
+
