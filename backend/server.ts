@@ -9,7 +9,7 @@ import { calculateRouter } from "./routers/calculate";
 const app: Express = express();
 const PORT = process.env.PORT || "5000";
 
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({ origin: "http://52.195.225.174:80" }));
 app.use(express.json());
 
 app.use("/api/v1", calculateRouter);
